@@ -48,12 +48,12 @@ public class User {
     private String academicStatus;  // 학적상태
 
     // 스킬
-    @Column(length = 500)  // 여러 스킬을 저장할 수 있도록 길이 설정
-    private String skills;     // Set<String>에서 String으로 변경
+    @Column(length = 500)
+    private String skills;
 
     // 희망직무
-    @Column(length = 500)  // 여러 직무를 저장할 수 있도록 길이 설정
-    private String desiredPositions;  // Set<String>에서 String으로 변경
+    @Column(length = 500)
+    private String desiredPositions;
 
     // 포트폴리오 URL
     private String portfolioUrl;

@@ -46,7 +46,7 @@ public class DataInitializer {
                     .address("서울특별시 강남구 xxx아파트 xxx호")
                     .phoneNumber("010-1111-2222")
                     .email("undergod@fighting.com")
-                    .password(passwordEncoder.encode("1234"))  // 비밀번호 암호화
+                    .password(passwordEncoder.encode("1234"))
                     
                     // 학력 정보
                     .schoolName("고려대학교 세종캠퍼스")
@@ -55,10 +55,10 @@ public class DataInitializer {
                     .graduationYear("2025")
                     .academicStatus("재학")
                     
-                    // 스킬 (쉼표로 구분된 문자열로 저장)
+
                     .skills("Javascript,Java,Python,C++")
                     
-                    // 희망 직무 (쉼표로 구분된 문자열로 저장)
+
                     .desiredPositions("Back-end")
                     
                     // 활동 이력
