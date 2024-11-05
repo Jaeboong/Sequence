@@ -1,20 +1,18 @@
 package com.example.Sequence.entity;
 
-import lombok.*;
 import jakarta.persistence.*;
-import java.util.List;
+import lombok.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class User {
-
     @Id
     @Column(length = 50)
     private String id;
@@ -23,7 +21,7 @@ public class User {
     private String name;            // 이름
 
     @Column(nullable = false)
-    private LocalDate birthDate;       // 생년월일
+    private LocalDate birthDate;    // 생년월일
 
     @Column(nullable = false)
     private String gender;          // 성별
@@ -43,7 +41,7 @@ public class User {
     // 학력 관련
     private String schoolName;      // 학교명
     private String majorName;       // 전공명
-    private String entranceYear;  // 입학연도
+    private String entranceYear;    // 입학연도
     private String graduationYear;  // 졸업연도
     private String academicStatus;  // 학적상태
 
@@ -63,22 +61,31 @@ public class User {
     @Column(length = 500)
     private String introduction;
 
-    // 경험 및 활동이력
-    @ElementCollection
-    @CollectionTable(name = "user_activities")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Activity> activities = new ArrayList<>();
-
-    // 경력
-    @ElementCollection
-    @CollectionTable(name = "user_careers")
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Career> careers = new ArrayList<>();
-
-    // 자격 및 수상
-    @ElementCollection
-    @CollectionTable(name = "user_certifications")
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Certification> certifications = new ArrayList<>();
-}
 
+    // 연관관계 편의 메서드
+    public void addActivity(Activity activity) {
+        activities.add(activity);
+        activity.setUser(this);
+    }
+
+    public void addCareer(Career career) {
+        careers.add(career);
+        career.setUser(this);
+    }
+
+    public void addCertification(Certification certification) {
+        certifications.add(certification);
+        certification.setUser(this);
+    }
+}
