@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.function.Function;
 
 @Component
 public class JwtUtil {
@@ -40,5 +41,14 @@ public class JwtUtil {
             .build()
             .parseClaimsJws(token)
             .getBody();
+    }
+    
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractClaim(token);
+        return claimsResolver.apply(claims);
+    }
+    
+    public String extractName(String token) {
+        return extractClaim(token, claims -> claims.get("username", String.class));
     }
 } 
