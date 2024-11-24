@@ -1,9 +1,11 @@
 package com.example.Sequence.controller;
 
+import com.example.Sequence.dto.request.LoginRequest;
+import com.example.Sequence.dto.response.ErrorResponse;
+import com.example.Sequence.dto.response.LoginResponse;
 import com.example.Sequence.entity.User;
 import com.example.Sequence.service.UserService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import com.example.Sequence.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +18,7 @@ public class LoginController {
     
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -23,7 +26,8 @@ public class LoginController {
             User user = userService.login(loginRequest.getId(), loginRequest.getPassword());
             
             if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-                return ResponseEntity.ok(new LoginResponse(user.getId(), "로그인에 성공했습니다."));
+                String token = jwtUtil.generateToken(user.getId(), user.getName());
+                return ResponseEntity.ok(new LoginResponse("로그인에 성공했습니다.", user.getName(), token));
             } else {
                 return ResponseEntity.badRequest()
                     .body(new ErrorResponse("비밀번호가 일치하지 않습니다."));
@@ -33,24 +37,5 @@ public class LoginController {
                 .body(new ErrorResponse(e.getMessage()));
         }
     }
-}
 
-@Getter
-@AllArgsConstructor
-class LoginRequest {
-    private String id;
-    private String password;
 }
-
-@Getter
-@AllArgsConstructor
-class LoginResponse {
-    private String id;
-    private String message;
-}
-
-@Getter
-@AllArgsConstructor
-class ErrorResponse {
-    private String message;
-} 

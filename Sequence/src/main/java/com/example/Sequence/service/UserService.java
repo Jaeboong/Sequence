@@ -8,6 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.Sequence.entity.User;
 import com.example.Sequence.repository.UserRepository;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -38,4 +41,69 @@ public class UserService implements UserDetailsService {
 
         return user;
     }
-} 
+
+    public User register(User user) {
+        // 아이디 중복 검사
+        if (userRepository.findById(user.getId()).isPresent()) {
+            throw new IllegalArgumentException("이미 존재하는 아이디입니다.");
+        }
+        
+        // 이메일 중복 검사
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("이미 사용 중인 이메일입니다.");
+        }
+        
+        // 전화번호 중복 검사
+        if (userRepository.findByPhoneNumber(user.getPhoneNumber()).isPresent()) {
+            throw new IllegalArgumentException("이미 사용 중인 전화번호입니다.");
+        }
+        
+        return userRepository.save(user);
+    }
+
+    public String savePortfolioFile(MultipartFile file, String userId) {
+        try {
+            String fileName = userId + "_" + file.getOriginalFilename();
+            String filePath = "E:\\Github_Study\\Sequence\\Sequence\\uploads\\portfolio\\" + fileName;
+    
+            // 파일 저장
+            file.transferTo(new File(filePath));
+    
+            // User 엔티티 업데이트
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+            user.setPortfolioFile(fileName);
+            userRepository.save(user);
+    
+            return fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("파일 저장에 실패했습니다: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new RuntimeException("알 수 없는 오류 발생: " + e.getMessage(), e);
+        }
+    }
+
+    public String saveProfileImage(MultipartFile file, String userId) {
+        try {
+            String fileName = userId + "_profile_" + file.getOriginalFilename();
+            String filePath = "E:\\Github_Study\\Sequence\\Sequence\\uploads\\profileImage\\" + fileName;
+            
+            // 파일 저장
+            file.transferTo(new File(filePath));
+            
+            // User 엔티티 업데이트
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+            user.setProfileImage(fileName);
+            userRepository.save(user);
+            
+            return fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("프로필 이미지 저장에 실패했습니다.", e);
+        }
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.findByName(username).isPresent();
+    }
+}

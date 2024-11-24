@@ -124,7 +124,6 @@ public class DataInitializer {
                     .skills("Python,React,Node.js,AWS")
                     .desiredPositions("Full-stack,DevOps")
                     .portfolioUrl("https://github.com/honggildong")
-                    .portfolioFile("portfolio_홍길동.pdf")
                     .introduction("안녕하세요, 풀스택 개발자를 꿈꾸는 홍길동입니다...")
                     .build();
 

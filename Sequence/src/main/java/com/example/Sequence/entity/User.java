@@ -73,6 +73,8 @@ public class User {
     @Builder.Default
     private List<Certification> certifications = new ArrayList<>();
 
+    private String profileImage;    // 프로필 이미지 파일명 저장
+
     // 연관관계 편의 메서드
     public void addActivity(Activity activity) {
         activities.add(activity);
