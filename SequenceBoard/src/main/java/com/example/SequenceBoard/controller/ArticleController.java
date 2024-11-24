@@ -27,9 +27,8 @@ public class ArticleController {
         String username = requestDto.getUsername();
         
         boolean isValid = userValidationService.validateUser(token, username);
-        
         if (!isValid) {
-            throw new UnauthorizedException("Invalid user or token");
+            throw new UnauthorizedException("존재하지 않는 사용자입니다.");
         }
         
         ArticleResponseDto response = articleService.createArticle(requestDto, username);
