@@ -8,6 +8,7 @@ import com.example.Sequence.entity.Activity;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -32,6 +33,7 @@ public class DataInitializer {
     private PasswordEncoder passwordEncoder;
 
     @Bean
+    @Profile("dev")
     public CommandLineRunner initData() {
         return args -> {
             TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);

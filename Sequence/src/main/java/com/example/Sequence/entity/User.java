@@ -1,16 +1,16 @@
 package com.example.Sequence.entity;
 
-import lombok.*;
 import jakarta.persistence.*;
-import java.util.List;
+import lombok.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User {
@@ -20,65 +20,47 @@ public class User {
     private String id;
 
     @Column(nullable = false)
-    private String name;            // 이름
+    private String name;
 
     @Column(nullable = false)
-    private LocalDate birthDate;       // 생년월일
+    private LocalDate birthDate;
 
     @Column(nullable = false)
-    private String gender;          // 성별
+    private String gender;
 
     @Column(nullable = false)
-    private String address;         // 주소지
+    private String address;
 
     @Column(nullable = false, unique = true)
-    private String phoneNumber;     // 휴대전화 번호
+    private String phoneNumber;
 
     @Column(nullable = false, unique = true)
-    private String email;           // 이메일
+    private String email;
 
     @Column(nullable = false)
-    private String password;        // 비밀번호
+    private String password;
 
-    // 학력 관련
-    private String schoolName;      // 학교명
-    private String majorName;       // 전공명
-    private String entranceYear;  // 입학연도
-    private String graduationYear;  // 졸업연도
-    private String academicStatus;  // 학적상태
-
-    // 스킬
-    @Column(length = 500)
+    private String schoolName;
+    private String majorName;
+    private String entranceYear;
+    private String graduationYear;
+    private String academicStatus;
     private String skills;
-
-    // 희망직무
-    @Column(length = 500)
     private String desiredPositions;
-
-    // 포트폴리오 URL
     private String portfolioUrl;
     private String portfolioFile;
-
-    // 자기소개
-    @Column(length = 500)
     private String introduction;
 
-    // 경험 및 활동이력
+    // 연관관계 설정
     @ElementCollection
-    @CollectionTable(name = "user_activities")
-    @Builder.Default
-    private List<Activity> activities = new ArrayList<>();
+    @CollectionTable(name = "user_certifications", joinColumns = @JoinColumn(name = "user_id"))
+    private List<Certification> certifications = new ArrayList<>();
 
-    // 경력
     @ElementCollection
-    @CollectionTable(name = "user_careers")
-    @Builder.Default
+    @CollectionTable(name = "user_careers", joinColumns = @JoinColumn(name = "user_id"))
     private List<Career> careers = new ArrayList<>();
 
-    // 자격 및 수상
     @ElementCollection
-    @CollectionTable(name = "user_certifications")
-    @Builder.Default
-    private List<Certification> certifications = new ArrayList<>();
+    @CollectionTable(name = "user_activities", joinColumns = @JoinColumn(name = "user_id"))
+    private List<Activity> activities = new ArrayList<>();
 }
-
